@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,65 +21,65 @@ limitations under the License.
 // RAII class to handle item lists and common functions
 class CIdList
 {
-  public:
-    CIdList():idList_(nullptr) {}
-    // Constructor takes ownership
-    CIdList(LPITEMIDLIST pidl):idList_(pidl) {}
-    ~CIdList() { DeleteIdList(); }
+    public:
+        CIdList():idList_(nullptr) {}
+        // Constructor takes ownership
+        CIdList(LPITEMIDLIST pidl):idList_(pidl) {}
+        ~CIdList() { DeleteIdList(); }
 
-    // Implicitly convertible to CONST pointer
-    operator LPCITEMIDLIST() const { return idList_; }
-    // Reassigns id list and takes ownership
-    void Reset(LPITEMIDLIST& pidl) { DeleteIdList(); idList_ = pidl; pidl = nullptr; }
-    void Reset() { DeleteIdList(); idList_ = nullptr; }
-    // Returns pointer to id list and releases ownership
-    LPITEMIDLIST Release() { LPITEMIDLIST idList = idList_; idList_ = nullptr; return idList; }
+        // Implicitly convertible to CONST pointer
+        operator LPCITEMIDLIST() const { return idList_; }
+        // Reassigns id list and takes ownership
+        void Reset(LPITEMIDLIST& pidl) { DeleteIdList(); idList_ = pidl; pidl = nullptr; }
+        void Reset() { DeleteIdList(); idList_ = nullptr; }
+        // Returns pointer to id list and releases ownership
+        LPITEMIDLIST Release() { LPITEMIDLIST idList = idList_; idList_ = nullptr; return idList; }
 
-    static HRESULT Combine(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, CIdList& pidlDest);
-    static HRESULT Clone(LPCITEMIDLIST pidl, CIdList& pidlDest);
-    static HRESULT CloneChild(LPCITEMIDLIST pidl, CIdList& pidlDest);
+        static HRESULT Combine(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, CIdList& pidlDest);
+        static HRESULT Clone(LPCITEMIDLIST pidl, CIdList& pidlDest);
+        static HRESULT CloneChild(LPCITEMIDLIST pidl, CIdList& pidlDest);
 
-  private:
-    void DeleteIdList() { if (idList_ != nullptr) CoTaskMemFree(idList_); }
-    LPITEMIDLIST idList_;
+    private:
+        void DeleteIdList() { if (idList_ != nullptr) CoTaskMemFree(idList_); }
+        LPITEMIDLIST idList_;
 
-    // Disallow copy and assignment
-    CIdList(const CIdList& src);
-    CIdList& operator=(const CIdList& src);
+        // Disallow copy and assignment
+        CIdList(const CIdList& src);
+        CIdList& operator=(const CIdList& src);
 };
 
 inline HRESULT CIdList::Combine(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, CIdList& pidlDest)
 {
-  LPITEMIDLIST combined = ILCombine(pidl1, pidl2);
-  if (combined == nullptr)
-    return E_OUTOFMEMORY;
+    LPITEMIDLIST combined = ILCombine(pidl1, pidl2);
+    if (combined == nullptr)
+        return E_OUTOFMEMORY;
 
-  pidlDest.Reset(combined);
-  return S_OK;
+    pidlDest.Reset(combined);
+    return S_OK;
 }
 
 inline HRESULT CIdList::Clone(LPCITEMIDLIST pidl, CIdList& pidlDest)
 {
-  if (pidl == nullptr)
-    return E_INVALIDARG;
+    if (pidl == nullptr)
+        return E_INVALIDARG;
 
-  LPITEMIDLIST clone = ILClone(pidl);
-  if (clone == nullptr)
-    return E_OUTOFMEMORY;
+    LPITEMIDLIST clone = ILClone(pidl);
+    if (clone == nullptr)
+        return E_OUTOFMEMORY;
 
-  pidlDest.Reset(clone);
-  return S_OK;
+    pidlDest.Reset(clone);
+    return S_OK;
 }
 
 inline HRESULT CIdList::CloneChild(LPCITEMIDLIST pidl, CIdList& pidlDest)
 {
-  if (pidl == nullptr)
-    return E_INVALIDARG;
+    if (pidl == nullptr)
+        return E_INVALIDARG;
 
-  LPITEMIDLIST clone = ILCloneChild(pidl);
-  if (clone == nullptr)
-    return E_OUTOFMEMORY;
+    LPITEMIDLIST clone = ILCloneChild(pidl);
+    if (clone == nullptr)
+        return E_OUTOFMEMORY;
 
-  pidlDest.Reset(clone);
-  return S_OK;
+    pidlDest.Reset(clone);
+    return S_OK;
 }

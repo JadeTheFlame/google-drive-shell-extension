@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,358 +24,358 @@ using namespace Fusion::GoogleDrive;
 
 XmlReader::XmlReader(void)
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::XmlReader(void)");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::XmlReader(void)");
 
-  Init();
+    Init();
 }
 
 XmlReader::XmlReader(const std::wstring& xml)
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::XmlReader(const std::wstring& xml)");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::XmlReader(const std::wstring& xml)");
 
-  Init(xml);
+    Init(xml);
 }
 
 XmlReader::~XmlReader(void)
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::~XmlReader(void)");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::~XmlReader(void)");
 }
 
 void XmlReader::Init(void)
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::Init(void)");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::Init(void)");
 
-  Init(L"");
+    Init(L"");
 }
 
 void XmlReader::Init(const std::wstring& xml)
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::Init(const std::wstring& xml)");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::Init(const std::wstring& xml)");
 
-  _Xml = xml;
+    _Xml = xml;
 
-  Reset();
+    Reset();
 }
 
 void XmlReader::Reset()
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::Reset()");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::Reset()");
 
-  _StartIndex = 0;
-  _EndIndex = 0;
-  _ElementName = L"";
-  _LastElementName = L"";
-  _IsEndElement = false;
+    _StartIndex = 0;
+    _EndIndex = 0;
+    _ElementName = L"";
+    _LastElementName = L"";
+    _IsEndElement = false;
 }
 
 bool XmlReader::MoveToNextElement()
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::MoveToNextElement()");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::MoveToNextElement()");
 
-  _ElementName = L"";
-
-  if (_StartIndex == std::wstring::npos || _StartIndex >= _Xml.length())
-    return false;
-
-  if (_EndIndex == std::wstring::npos || _EndIndex > _Xml.length() || _EndIndex < _StartIndex)
-    return false;
-
-  size_t startIndex = 0;
-
-  if (!_IsEndElement && _EndIndex > 4)
-  {
-    startIndex = _EndIndex - 4;
-  }
-  else if (!_IsEndElement && _EndIndex > 1)
-  {
-    startIndex = _EndIndex - 1;
-  }
-  else
-  {
-    startIndex = _EndIndex;
-  }
-
-  if (startIndex > 0 && startIndex <= _StartIndex)
-  {
-    startIndex = _StartIndex + 1;
-  }
-
-  if (startIndex > _EndIndex)
-  {
-    _StartIndex = std::wstring::npos;
-
-    return false;
-  }
-
-  _StartIndex = startIndex;
-
-  std::wstring find1 = L"<";
-  size_t endIndex1 = _Xml.find(find1, _StartIndex);
-
-  std::wstring find2 = L" />";
-  size_t endIndex2 = _Xml.find(find2, _StartIndex);
-
-  std::wstring find = L"";
-  size_t endIndex = std::wstring::npos;
-
-  if (endIndex1 != std::wstring::npos && (endIndex1 < endIndex2 || endIndex2 == std::wstring::npos))
-  {
-    find = find1;
-    endIndex = endIndex1;
-
-    _StartIndex = _Xml.find(find, endIndex);
+    _ElementName = L"";
 
     if (_StartIndex == std::wstring::npos || _StartIndex >= _Xml.length())
-      return false;
+        return false;
 
-    find1 = L">";
-    endIndex1 = _Xml.find(find1, _StartIndex);
+    if (_EndIndex == std::wstring::npos || _EndIndex > _Xml.length() || _EndIndex < _StartIndex)
+        return false;
 
-    find2 = L" />";
-    endIndex2 = _Xml.find(find2, _StartIndex);
+    size_t startIndex = 0;
 
-    find = L"";
-    endIndex = std::wstring::npos;
-
-    if (endIndex1 != std::wstring::npos && (endIndex1 < endIndex2 || endIndex2 == std::wstring::npos))
+    if (!_IsEndElement && _EndIndex > 4)
     {
-      find = find1;
-      endIndex = endIndex1;
+        startIndex = _EndIndex - 4;
     }
-    else if (endIndex2 != std::wstring::npos && (endIndex2 < endIndex1 || endIndex1 == std::wstring::npos))
+    else if (!_IsEndElement && _EndIndex > 1)
     {
-      find = find2;
-      endIndex = endIndex2;
+        startIndex = _EndIndex - 1;
     }
     else
     {
-      _StartIndex = std::wstring::npos;
-
-      return false;
+        startIndex = _EndIndex;
     }
 
-    _EndIndex = endIndex + find.length();
-
-    startIndex = _StartIndex + 1;
-    size_t tempIndex = _Xml.find(L" ", startIndex);
-
-    if (tempIndex != std::wstring::npos && tempIndex < _EndIndex)
+    if (startIndex > 0 && startIndex <= _StartIndex)
     {
-      endIndex = tempIndex;
+        startIndex = _StartIndex + 1;
     }
 
-    if (endIndex >= _EndIndex)
+    if (startIndex > _EndIndex)
     {
-      _StartIndex = std::wstring::npos;
+        _StartIndex = std::wstring::npos;
 
-      return false;
+        return false;
     }
 
-    bool isEndElement = false;
+    _StartIndex = startIndex;
 
-    if (_Xml[startIndex] == '/')
+    std::wstring find1 = L"<";
+    size_t endIndex1 = _Xml.find(find1, _StartIndex);
+
+    std::wstring find2 = L" />";
+    size_t endIndex2 = _Xml.find(find2, _StartIndex);
+
+    std::wstring find = L"";
+    size_t endIndex = std::wstring::npos;
+
+    if (endIndex1 != std::wstring::npos && (endIndex1 < endIndex2 || endIndex2 == std::wstring::npos))
     {
-      startIndex += 1;
-      isEndElement = true;
+        find = find1;
+        endIndex = endIndex1;
+
+        _StartIndex = _Xml.find(find, endIndex);
+
+        if (_StartIndex == std::wstring::npos || _StartIndex >= _Xml.length())
+            return false;
+
+        find1 = L">";
+        endIndex1 = _Xml.find(find1, _StartIndex);
+
+        find2 = L" />";
+        endIndex2 = _Xml.find(find2, _StartIndex);
+
+        find = L"";
+        endIndex = std::wstring::npos;
+
+        if (endIndex1 != std::wstring::npos && (endIndex1 < endIndex2 || endIndex2 == std::wstring::npos))
+        {
+            find = find1;
+            endIndex = endIndex1;
+        }
+        else if (endIndex2 != std::wstring::npos && (endIndex2 < endIndex1 || endIndex1 == std::wstring::npos))
+        {
+            find = find2;
+            endIndex = endIndex2;
+        }
+        else
+        {
+            _StartIndex = std::wstring::npos;
+
+            return false;
+        }
+
+        _EndIndex = endIndex + find.length();
+
+        startIndex = _StartIndex + 1;
+        size_t tempIndex = _Xml.find(L" ", startIndex);
+
+        if (tempIndex != std::wstring::npos && tempIndex < _EndIndex)
+        {
+            endIndex = tempIndex;
+        }
+
+        if (endIndex >= _EndIndex)
+        {
+            _StartIndex = std::wstring::npos;
+
+            return false;
+        }
+
+        bool isEndElement = false;
+
+        if (_Xml[startIndex] == '/')
+        {
+            startIndex += 1;
+            isEndElement = true;
+        }
+
+        size_t length = endIndex - startIndex;
+
+        _ElementName = _Xml.substr(startIndex, length);
+        _LastElementName = _ElementName;
+        _IsEndElement = isEndElement;
+    }
+    else if (endIndex2 != std::wstring::npos && (endIndex2 < endIndex1 || endIndex1 == std::wstring::npos))
+    {
+        _StartIndex = endIndex2;
+
+        _ElementName = _LastElementName;
+        _IsEndElement = true;
+    }
+    else
+    {
+        _StartIndex = std::wstring::npos;
+
+        return false;
     }
 
-    size_t length = endIndex - startIndex;
+    if (_StartIndex == std::wstring::npos || _StartIndex > _Xml.length())
+        return false;
 
-    _ElementName = _Xml.substr(startIndex, length);
-    _LastElementName = _ElementName;
-    _IsEndElement = isEndElement;
-  }
-  else if (endIndex2 != std::wstring::npos && (endIndex2 < endIndex1 || endIndex1 == std::wstring::npos))
-  {
-    _StartIndex = endIndex2;
+    if (_EndIndex == std::wstring::npos || _EndIndex > _Xml.length() || _EndIndex < _StartIndex)
+        return false;
 
-    _ElementName = _LastElementName;
-    _IsEndElement = true;
-  }
-  else
-  {
-    _StartIndex = std::wstring::npos;
+    if (_ElementName.length() == 0)
+    {
+        _StartIndex = std::wstring::npos;
 
-    return false;
-  }
+        return false;
+    }
 
-  if (_StartIndex == std::wstring::npos || _StartIndex > _Xml.length())
-    return false;
-
-  if (_EndIndex == std::wstring::npos || _EndIndex > _Xml.length() || _EndIndex < _StartIndex)
-    return false;
-
-  if (_ElementName.length() == 0)
-  {
-    _StartIndex = std::wstring::npos;
-
-    return false;
-  }
-
-  return true;
+    return true;
 }
 
 int XmlReader::GetAttributeValue(const std::wstring& attributeName, int defaultValue)
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::GetAttributeValue(const std::wstring& attributeName, int defaultValue)");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::GetAttributeValue(const std::wstring& attributeName, int defaultValue)");
 
-  std::wstring tempValue = std::to_wstring((long double)defaultValue);
+    std::wstring tempValue = std::to_wstring((long double)defaultValue);
 
-  tempValue = GetAttributeValue(attributeName, tempValue);
+    tempValue = GetAttributeValue(attributeName, tempValue);
 
-  int result = std::stoi(tempValue);
+    int result = std::stoi(tempValue);
 
-  return result;
+    return result;
 }
 
 long XmlReader::GetAttributeValue(const std::wstring& attributeName, long defaultValue)
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::GetAttributeValue(const std::wstring& attributeName, long defaultValue)");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::GetAttributeValue(const std::wstring& attributeName, long defaultValue)");
 
-  std::wstring tempValue = std::to_wstring((long double)defaultValue);
+    std::wstring tempValue = std::to_wstring((long double)defaultValue);
 
-  tempValue = GetAttributeValue(attributeName, tempValue);
+    tempValue = GetAttributeValue(attributeName, tempValue);
 
-  long result = std::stol(tempValue);
+    long result = std::stol(tempValue);
 
-  return result;
+    return result;
 }
 
 bool XmlReader::GetAttributeValue(const std::wstring& attributeName, bool defaultValue)
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::GetAttributeValue(const std::wstring& attributeName, bool defaultValue)");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::GetAttributeValue(const std::wstring& attributeName, bool defaultValue)");
 
-  std::wstring tempValue = L"0";
+    std::wstring tempValue = L"0";
 
-  if (defaultValue)
-  {
-    tempValue = L"1";
-  }
+    if (defaultValue)
+    {
+        tempValue = L"1";
+    }
 
-  tempValue = GetAttributeValue(attributeName, tempValue);
+    tempValue = GetAttributeValue(attributeName, tempValue);
 
-  if (tempValue == L"1" || tempValue == L"true" || tempValue == L"True" || tempValue == L"TRUE")
-    return true;
+    if (tempValue == L"1" || tempValue == L"true" || tempValue == L"True" || tempValue == L"TRUE")
+        return true;
 
-  return false;
+    return false;
 }
 
 std::wstring XmlReader::GetAttributeValue(const std::wstring& attributeName, const wchar_t* defaultValue)
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::GetAttributeValue(const std::wstring& attributeName, const wchar_t* defaultValue)");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::GetAttributeValue(const std::wstring& attributeName, const wchar_t* defaultValue)");
 
-  return GetAttributeValue(attributeName, std::wstring(defaultValue));
+    return GetAttributeValue(attributeName, std::wstring(defaultValue));
 }
 
 std::wstring ReplaceString(const std::wstring& value, const std::wstring& search, const std::wstring& replace)
 {
-  std::wstring result = value;
+    std::wstring result = value;
 
-  while (true)
-  {
-    size_t index = result.find(search);
+    while (true)
+    {
+        size_t index = result.find(search);
 
-    if (index == -1)
-      break;
+        if (index == -1)
+            break;
 
-    std::wstring left = result.substr(0, index);
+        std::wstring left = result.substr(0, index);
 
-    index += search.length();
+        index += search.length();
 
-    std::wstring right = result.substr(index, result.length() - index);
+        std::wstring right = result.substr(index, result.length() - index);
 
-    result = left + replace + right;
-  }
+        result = left + replace + right;
+    }
 
-  return result;
+    return result;
 }
 
 std::wstring ReplaceSpecialCharacters(const std::wstring& value)
 {
-  std::wstring result = value;
+    std::wstring result = value;
 
-  result = ReplaceString(result, L"&amp;", L"&");
+    result = ReplaceString(result, L"&amp;", L"&");
 
-  return result;
+    return result;
 }
 
 std::wstring XmlReader::GetAttributeValue(const std::wstring& attributeName, std::wstring defaultValue)
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::GetAttributeValue(const std::wstring& attributeName, std::wstring defaultValue)");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::GetAttributeValue(const std::wstring& attributeName, std::wstring defaultValue)");
 
-  if (_StartIndex == std::wstring::npos || _StartIndex >= _Xml.length())
-    return defaultValue;
+    if (_StartIndex == std::wstring::npos || _StartIndex >= _Xml.length())
+        return defaultValue;
 
-  std::wstring find = L" " + attributeName + L"=\"";
+    std::wstring find = L" " + attributeName + L"=\"";
 
-  size_t startIndex = _Xml.find(find, _StartIndex);
+    size_t startIndex = _Xml.find(find, _StartIndex);
 
-  if (startIndex == std::wstring::npos)
-    return defaultValue;
+    if (startIndex == std::wstring::npos)
+        return defaultValue;
 
-  startIndex += find.length();
+    startIndex += find.length();
 
-  size_t endIndex = _Xml.find(L"\"", startIndex);
+    size_t endIndex = _Xml.find(L"\"", startIndex);
 
-  if (endIndex == std::wstring::npos)
-    return defaultValue;
+    if (endIndex == std::wstring::npos)
+        return defaultValue;
 
-  size_t length = endIndex - startIndex;
+    size_t length = endIndex - startIndex;
 
-  std::wstring value = _Xml.substr(startIndex, length);
+    std::wstring value = _Xml.substr(startIndex, length);
 
-  value = ReplaceSpecialCharacters(value);
+    value = ReplaceSpecialCharacters(value);
 
-  return value;
+    return value;
 }
 
 std::wstring XmlReader::GetElementValue(const wchar_t* defaultValue)
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::GetElementValue(const wchar_t* defaultValue)");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::GetElementValue(const wchar_t* defaultValue)");
 
-  return GetElementValue(std::wstring(defaultValue));
+    return GetElementValue(std::wstring(defaultValue));
 }
 
 std::wstring XmlReader::GetElementValue(std::wstring defaultValue)
 {
-  Log::WriteOutput(LogType::Debug, L"XmlReader::GetElementValue(std::wstring defaultValue)");
+    Log::WriteOutput(LogType::Debug, L"XmlReader::GetElementValue(std::wstring defaultValue)");
 
-  if (_StartIndex == std::wstring::npos || _StartIndex >= _Xml.length())
-    return defaultValue;
+    if (_StartIndex == std::wstring::npos || _StartIndex >= _Xml.length())
+        return defaultValue;
 
-  if (IsEndElement())
-    return defaultValue;
+    if (IsEndElement())
+        return defaultValue;
 
-  size_t startIndex = _EndIndex;
+    size_t startIndex = _EndIndex;
 
-  if (!MoveToNextElement())
-    return defaultValue;
+    if (!MoveToNextElement())
+        return defaultValue;
 
-  if (!IsEndElement())
-    return defaultValue;
+    if (!IsEndElement())
+        return defaultValue;
 
-  size_t endIndex = _StartIndex;
+    size_t endIndex = _StartIndex;
 
-  std::wstring value = _Xml.substr(startIndex, endIndex - startIndex);
+    std::wstring value = _Xml.substr(startIndex, endIndex - startIndex);
 
-  value = ReplaceSpecialCharacters(value);
+    value = ReplaceSpecialCharacters(value);
 
-  return value;
+    return value;
 }
 
 std::vector<std::wstring> XmlReader::GetElementValues(const std::wstring& elementName)
 {
-  std::vector<std::wstring> values;
+    std::vector<std::wstring> values;
 
-  while (MoveToNextElement())
-  {
-    if (ElementName() == elementName && !IsEndElement())
+    while (MoveToNextElement())
     {
-      std::wstring value = GetElementValue(L"");
+        if (ElementName() == elementName && !IsEndElement())
+        {
+            std::wstring value = GetElementValue(L"");
 
-      values.push_back(value);
+            values.push_back(value);
+        }
     }
-  }
 
-  return values;
+    return values;
 }

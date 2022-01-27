@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,51 +29,51 @@ class CGDriveShlExt;
 class CDriveItem;
 
 class ContextMenuCBHandler :
-  public CComObjectRootEx<CComSingleThreadModel>,
-  public IContextMenuCB
+    public CComObjectRootEx<CComSingleThreadModel>,
+    public IContextMenuCB
 {
 public:
-  ContextMenuCBHandler()
-  {
-    Log::WriteOutput(LogType::Debug, L"GDriveCBHandler::GDriveCBHandler()");
+    ContextMenuCBHandler()
+    {
+        Log::WriteOutput(LogType::Debug, L"GDriveCBHandler::GDriveCBHandler()");
 
-    _gDriveShlExt = NULL;
-  }
+        _gDriveShlExt = NULL;
+    }
 
-  BEGIN_COM_MAP(ContextMenuCBHandler)
-    COM_INTERFACE_ENTRY(IContextMenuCB)
-  END_COM_MAP()
+    BEGIN_COM_MAP(ContextMenuCBHandler)
+        COM_INTERFACE_ENTRY(IContextMenuCB)
+    END_COM_MAP()
 
-  DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-  static HRESULT CreateInstance(CGDriveShlExt *gDriveShlExt, __deref_out CComObject<ContextMenuCBHandler> **ppv);
+    static HRESULT CreateInstance(CGDriveShlExt *gDriveShlExt, __deref_out CComObject<ContextMenuCBHandler> **ppv);
 
-  HRESULT ReturnInterfaceTo(REFIID riid, __deref_out void **ppv);
+    HRESULT ReturnInterfaceTo(REFIID riid, __deref_out void **ppv);
 
-  HRESULT FinalConstruct()
-  {
-    return S_OK;
-  }
+    HRESULT FinalConstruct()
+    {
+        return S_OK;
+    }
 
-  void FinalRelease();
+    void FinalRelease();
 
-  // IContextMenuCB
-  IFACEMETHODIMP CallBack(__in_opt IShellFolder *psf, HWND hwndOwner, __in_opt IDataObject *pdtobj, UINT uiMsg, WPARAM wParam, LPARAM lParam);
+    // IContextMenuCB
+    IFACEMETHODIMP CallBack(__in_opt IShellFolder *psf, HWND hwndOwner, __in_opt IDataObject *pdtobj, UINT uiMsg, WPARAM wParam, LPARAM lParam);
 
-  void DownloadFiles();
-
-private:
-  HRESULT _Initialize(CGDriveShlExt* gDriveShlExt);
-
-  HRESULT _ConvertDataObjectToVectorOfDriveItems(__in IDataObject *pdo, std::vector<CDriveItem>* driveItemList) const;
-  void _ReleaseContextMenuSelection();
-  void _DownloadFilesIfReady();
-  std::wstring _GetContextMenuCBString(UINT uiMsg, WPARAM wParam, LPARAM lParam);
-  bool _PdoIsGoogleDoc(IDataObject& pdo) const;
+    void DownloadFiles();
 
 private:
-  CGDriveShlExt* _gDriveShlExt;
-  IDataObject* _pdo;
-  bool _downloadWhenReady;
+    HRESULT _Initialize(CGDriveShlExt* gDriveShlExt);
+
+    HRESULT _ConvertDataObjectToVectorOfDriveItems(__in IDataObject *pdo, std::vector<CDriveItem>* driveItemList) const;
+    void _ReleaseContextMenuSelection();
+    void _DownloadFilesIfReady();
+    std::wstring _GetContextMenuCBString(UINT uiMsg, WPARAM wParam, LPARAM lParam);
+    bool _PdoIsGoogleDoc(IDataObject& pdo) const;
+
+private:
+    CGDriveShlExt* _gDriveShlExt;
+    IDataObject* _pdo;
+    bool _downloadWhenReady;
 };
 

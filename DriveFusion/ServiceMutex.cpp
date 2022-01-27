@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,41 +18,41 @@ limitations under the License.
 
 Scoped_Mutex::Scoped_Mutex(void)
 {
-  _handle = CreateMutex(NULL, FALSE, NULL);
+    _handle = CreateMutex(NULL, FALSE, NULL);
 }
 
 Scoped_Mutex::~Scoped_Mutex(void)
 {
-  if (_handle != NULL)
-  {
-    WaitForSingleObject(_handle, INFINITE);
-    CloseHandle(_handle);
-    _handle = NULL;
-  }
+    if (_handle != NULL)
+    {
+        WaitForSingleObject(_handle, INFINITE);
+        CloseHandle(_handle);
+        _handle = NULL;
+    }
 }
 
 bool Scoped_Mutex::_Lock(int timeout)
 {
-  if (_handle == NULL)
-  {
-    Log::HRFromWin32(false, L"Scoped_Mutex::_Lock");
+    if (_handle == NULL)
+    {
+        Log::HRFromWin32(false, L"Scoped_Mutex::_Lock");
 
-    return false;
-  }
+        return false;
+    }
 
-  DWORD state = WaitForSingleObject(_handle, timeout);
+    DWORD state = WaitForSingleObject(_handle, timeout);
 
-  if (state != WAIT_OBJECT_0)
-  {
-    return false;
-  }
+    if (state != WAIT_OBJECT_0)
+    {
+        return false;
+    }
 
-  return true;
+    return true;
 }
 
 bool Scoped_Mutex::_Unlock()
 {
-  HRESULT hr = Log::HRFromWin32( (ReleaseMutex(_handle) > 0) , L"Scoped_Mutex::_Unlock");
+    HRESULT hr = Log::HRFromWin32( (ReleaseMutex(_handle) > 0) , L"Scoped_Mutex::_Unlock");
 
-  return SUCCEEDED(hr);
+    return SUCCEEDED(hr);
 }

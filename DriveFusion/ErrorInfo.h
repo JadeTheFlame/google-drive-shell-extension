@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,36 +21,36 @@ limitations under the License.
 
 namespace Fusion
 {
-  namespace GoogleDrive
-  {
-    struct ErrorInfoType
+    namespace GoogleDrive
     {
-      enum eType
-      {
-        None = 0,
-        Authentication = 1,
-      };
-    };
+        struct ErrorInfoType
+        {
+            enum eType
+            {
+                None = 0,
+                Authentication = 1,
+            };
+        };
 
-    class ErrorInfo
-    {
-    public:
-      ErrorInfo(void);
-      ErrorInfo(const std::wstring& xml);
-      ErrorInfo(XmlReader* xmlReader);
-      ~ErrorInfo(void);
+        class ErrorInfo
+        {
+        public:
+            ErrorInfo(void);
+            ErrorInfo(const std::wstring& xml);
+            ErrorInfo(XmlReader* xmlReader);
+            ~ErrorInfo(void);
 
-      static ErrorInfo* FromMessage(const std::wstring& message);
+            static ErrorInfo* FromMessage(const std::wstring& message);
 
-      ErrorInfoType::eType Type;
-      std::wstring Message;
-      std::vector<std::wstring> Details;
+            ErrorInfoType::eType Type;
+            std::wstring Message;
+            std::vector<std::wstring> Details;
 
-    protected:
-      void Init(void);
-      void Init(const std::wstring& xml);
-      void Init(XmlReader* xmlReader);
-    };
-  }
+        protected:
+            void Init(void);
+            void Init(const std::wstring& xml);
+            void Init(XmlReader* xmlReader);
+        };
+    }
 }
 

@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,26 +22,26 @@ limitations under the License.
 
 namespace Fusion
 {
-  namespace GoogleDrive
-  {
-    class MethodInfo
+    namespace GoogleDrive
     {
-    public:
-      MethodInfo(void);
-      MethodInfo(MethodType::eType methodType);
-      ~MethodInfo(void);
+        class MethodInfo
+        {
+        public:
+            MethodInfo(void);
+            MethodInfo(MethodType::eType methodType);
+            ~MethodInfo(void);
 
-      MethodType::eType Type;
-      std::vector<std::wstring> Parameters;
+            MethodType::eType Type;
+            std::vector<std::wstring> Parameters;
 
-      void AddParameter(const std::wstring& value);
-      void AddParameter(const std::vector<std::wstring>& values);
-      std::wstring ToString();
+            void AddParameter(const std::wstring& value);
+            void AddParameter(const std::vector<std::wstring>& values);
+            std::wstring ToString();
 
-    protected:
-      void Init(void);
-      void Init(MethodType::eType methodType);
-    };
-  }
+        protected:
+            void Init(void);
+            void Init(MethodType::eType methodType);
+        };
+    }
 }
 

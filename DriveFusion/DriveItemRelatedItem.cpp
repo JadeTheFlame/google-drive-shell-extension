@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,573 +25,573 @@ DWORD CDriveItemRelatedItem::_nextCookie = 0;
 
 HRESULT CDriveItemRelatedItem::CreateInstanceReturnInterfaceTo(CGDriveShlExt* gDriveShlExt, REFIID riid, __deref_out void **ppv)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::CreateInstance");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::CreateInstance");
 
-  *ppv = NULL;
+    *ppv = NULL;
 
-  CComObject<CDriveItemRelatedItem> *psprfvcb;
+    CComObject<CDriveItemRelatedItem> *psprfvcb;
 
-  HRESULT hr = CComObject<CDriveItemRelatedItem>::CreateInstance(&psprfvcb);
+    HRESULT hr = CComObject<CDriveItemRelatedItem>::CreateInstance(&psprfvcb);
 
-  if (!SUCCEEDED(hr))
-  {
-    Log::WriteOutput(LogType::Error, L"CComObject<CDriveItemRelatedItem>::CreateInstance returned hr=%d", hr);
-  }
-  else
-  {
-    psprfvcb->AddRef();
-    hr = psprfvcb->_Initialize(gDriveShlExt);
-
-    if (SUCCEEDED(hr))
+    if (!SUCCEEDED(hr))
     {
-      hr = psprfvcb->QueryInterface(riid, ppv);
+        Log::WriteOutput(LogType::Error, L"CComObject<CDriveItemRelatedItem>::CreateInstance returned hr=%d", hr);
+    }
+    else
+    {
+        psprfvcb->AddRef();
+        hr = psprfvcb->_Initialize(gDriveShlExt);
 
-      if (!SUCCEEDED(hr))
-      {
-        Log::LogUnknownIID(riid, L"CDriveItemRelatedItem::CreateInstanceReturnInterfaceTo()");
-      }
+        if (SUCCEEDED(hr))
+        {
+            hr = psprfvcb->QueryInterface(riid, ppv);
+
+            if (!SUCCEEDED(hr))
+            {
+                Log::LogUnknownIID(riid, L"CDriveItemRelatedItem::CreateInstanceReturnInterfaceTo()");
+            }
+        }
+
+        psprfvcb->Release();
     }
 
-    psprfvcb->Release();
-  }
-
-  return hr;
+    return hr;
 }
 
 void CDriveItemRelatedItem::FinalRelease()
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::FinalRelease()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::FinalRelease()");
 
-  _gDriveShlExt->Release();
+    _gDriveShlExt->Release();
 }
 
 HRESULT CDriveItemRelatedItem::_Initialize(CGDriveShlExt* gDriveShlExt)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::_Initialize");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::_Initialize");
 
-  _gDriveShlExt = gDriveShlExt;
+    _gDriveShlExt = gDriveShlExt;
 
-  _gDriveShlExt->AddRef();
+    _gDriveShlExt->AddRef();
 
-  return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CDriveItemRelatedItem::GetItem(__RPC__deref_out_opt IShellItem **ppsi)
 {
-  try
-  {
-    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::GetItem()");
-
-    CComHeapPtr<ITEMIDLIST_ABSOLUTE> pidl;
-
-    HRESULT hr = _gDriveShlExt->GetCurFolder(&pidl);
-
-    if (SUCCEEDED(hr))
+    try
     {
-      hr = SHCreateItemFromIDList(pidl, IID_PPV_ARGS(ppsi));
+        Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::GetItem()");
 
-      if (!SUCCEEDED(hr))
-      {
-        Log::WriteOutput(LogType::Error, L"SHCreateItemFromIDList returned hr=%d", hr);
-      }
+        CComHeapPtr<ITEMIDLIST_ABSOLUTE> pidl;
+
+        HRESULT hr = _gDriveShlExt->GetCurFolder(&pidl);
+
+        if (SUCCEEDED(hr))
+        {
+            hr = SHCreateItemFromIDList(pidl, IID_PPV_ARGS(ppsi));
+
+            if (!SUCCEEDED(hr))
+            {
+                Log::WriteOutput(LogType::Error, L"SHCreateItemFromIDList returned hr=%d", hr);
+            }
+        }
+
+        return hr;
     }
+    catch (...)
+    {
+        Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::GetItem");
 
-    return hr;
-  }
-  catch (...)
-  {
-    Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::GetItem");
-
-    return E_FAIL;
-  }
+        return E_FAIL;
+    }
 }
 
 STDMETHODIMP CDriveItemRelatedItem::GetItemIDList(__RPC__deref_out_opt PIDLIST_ABSOLUTE *ppidl)
 {
-  try
-  {
-    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::GetItemIDList()");
+    try
+    {
+        Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::GetItemIDList()");
 
-    return _gDriveShlExt->GetCurFolder(ppidl);
-  }
-  catch (...)
-  {
-    Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::GetItemIDList");
+        return _gDriveShlExt->GetCurFolder(ppidl);
+    }
+    catch (...)
+    {
+        Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::GetItemIDList");
 
-    return E_FAIL;
-  }
+        return E_FAIL;
+    }
 }
 
-STDMETHODIMP CDriveItemRelatedItem::Advise(__in  ITransferAdviseSink *psink, __out  DWORD *pdwCookie)
+STDMETHODIMP CDriveItemRelatedItem::Advise(__in    ITransferAdviseSink *psink, __out    DWORD *pdwCookie)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::Advise()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::Advise()");
 
-  _sinkMap.insert(std::pair<DWORD, ITransferAdviseSink*>(_nextCookie, psink));
+    _sinkMap.insert(std::pair<DWORD, ITransferAdviseSink*>(_nextCookie, psink));
 
-  *pdwCookie = _nextCookie;
+    *pdwCookie = _nextCookie;
 
-  if (_nextCookie == (DWORD_PTR)std::numeric_limits<DWORD>::max)
-  {
-    _nextCookie = 0;
-  }
-  else
-  {
-    _nextCookie++;
-  }
+    if (_nextCookie == (DWORD_PTR)std::numeric_limits<DWORD>::max)
+    {
+        _nextCookie = 0;
+    }
+    else
+    {
+        _nextCookie++;
+    }
 
-  return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CDriveItemRelatedItem::Unadvise(DWORD dwCookie)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::Unadvise()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::Unadvise()");
 
-  AdviseSinkMap::iterator it = _sinkMap.find(dwCookie);
+    AdviseSinkMap::iterator it = _sinkMap.find(dwCookie);
 
-  if (it != _sinkMap.end())
-  {
-    _sinkMap.erase(it);
-  }
+    if (it != _sinkMap.end())
+    {
+        _sinkMap.erase(it);
+    }
 
-  return S_OK;
+    return S_OK;
 }
 
-STDMETHODIMP CDriveItemRelatedItem::CreateItem(__in  LPCWSTR pszName, __in  DWORD dwAttributes, __in  ULONGLONG ullSize, __in  TRANSFER_SOURCE_FLAGS flags, __in  REFIID riidItem, __deref_out  void **ppvItem, __in  REFIID riidResources, __deref_out  void **ppvResources)
+STDMETHODIMP CDriveItemRelatedItem::CreateItem(__in    LPCWSTR pszName, __in    DWORD dwAttributes, __in    ULONGLONG ullSize, __in    TRANSFER_SOURCE_FLAGS flags, __in    REFIID riidItem, __deref_out    void **ppvItem, __in    REFIID riidResources, __deref_out    void **ppvResources)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::CreateItem()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::CreateItem()");
 
-  if (ullSize != 0)
-  {
-    Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::CreateItem(), unhandled case ullSize != 0");
-  }
+    if (ullSize != 0)
+    {
+        Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::CreateItem(), unhandled case ullSize != 0");
+    }
 
-  if ((flags & TSF_MOVE_AS_COPY_DELETE) > 0)
-  {
-    Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::CreateItem(), unhandled case TSF_MOVE_AS_COPY_DELETE");
-  }
+    if ((flags & TSF_MOVE_AS_COPY_DELETE) > 0)
+    {
+        Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::CreateItem(), unhandled case TSF_MOVE_AS_COPY_DELETE");
+    }
 
-  CComHeapPtr<ITEMID_CHILD> childpidl;
+    CComHeapPtr<ITEMID_CHILD> childpidl;
 
-  CComPtr<IBindCtx> pbc;
-  BIND_OPTS options;
-  ZeroMemory(&options, sizeof(BIND_OPTS));
-  options.cbStruct = sizeof(BIND_OPTS);
-  options.grfFlags = BIND_MAYBOTHERUSER;
-  options.grfMode = STGM_CREATE;
+    CComPtr<IBindCtx> pbc;
+    BIND_OPTS options;
+    ZeroMemory(&options, sizeof(BIND_OPTS));
+    options.cbStruct = sizeof(BIND_OPTS);
+    options.grfFlags = BIND_MAYBOTHERUSER;
+    options.grfMode = STGM_CREATE;
 
-  HRESULT hr = CreateBindCtx(0, &pbc);
-
-  if (SUCCEEDED(hr))
-  {
-    hr = pbc->SetBindOptions(&options);
+    HRESULT hr = CreateBindCtx(0, &pbc);
 
     if (SUCCEEDED(hr))
     {
-      WCHAR name[MAX_PATH];
-      hr = StringCchCopy(name, MAX_PATH, pszName);
-
-      if (SUCCEEDED(hr))
-      {
-        hr = _gDriveShlExt->ParseDisplayName(NULL, pbc, name, NULL, &childpidl, &dwAttributes); // create a new file at google
-
-        if (((flags & TSF_OVERWRITE_EXIST) == TSF_OVERWRITE_EXIST) && hr == HRESULT_FROM_WIN32(ERROR_FILE_EXISTS))
-        {
-          hr = _gDriveShlExt->ParseDisplayName(NULL, NULL, name, NULL, &childpidl, &dwAttributes); // get the existing file
-        }
+        hr = pbc->SetBindOptions(&options);
 
         if (SUCCEEDED(hr))
         {
-          if (riidItem == IID_IShellItem)
-          {
-            CComPtr<IIdentityName> idName;
-
-            hr = _gDriveShlExt->BindToObject(childpidl, NULL, IID_PPV_ARGS(&idName)); // returns an instance of CDriveItemRelatedItem
+            WCHAR name[MAX_PATH];
+            hr = StringCchCopy(name, MAX_PATH, pszName);
 
             if (SUCCEEDED(hr))
             {
-              CComPtr<IShellItem> shellItem;
+                hr = _gDriveShlExt->ParseDisplayName(NULL, pbc, name, NULL, &childpidl, &dwAttributes); // create a new file at google
 
-              hr = idName->GetItem(&shellItem);
-
-              if (SUCCEEDED(hr))
-              {
-                hr = shellItem->QueryInterface(riidItem, ppvItem);
+                if (((flags & TSF_OVERWRITE_EXIST) == TSF_OVERWRITE_EXIST) && hr == HRESULT_FROM_WIN32(ERROR_FILE_EXISTS))
+                {
+                    hr = _gDriveShlExt->ParseDisplayName(NULL, NULL, name, NULL, &childpidl, &dwAttributes); // get the existing file
+                }
 
                 if (SUCCEEDED(hr))
                 {
-                  hr = idName->QueryInterface(riidResources, ppvResources); // this works cause I know idName is an instance of CDriveItemRelatedItem, which also impliments IShellItemResources
+                    if (riidItem == IID_IShellItem)
+                    {
+                        CComPtr<IIdentityName> idName;
+
+                        hr = _gDriveShlExt->BindToObject(childpidl, NULL, IID_PPV_ARGS(&idName)); // returns an instance of CDriveItemRelatedItem
+
+                        if (SUCCEEDED(hr))
+                        {
+                            CComPtr<IShellItem> shellItem;
+
+                            hr = idName->GetItem(&shellItem);
+
+                            if (SUCCEEDED(hr))
+                            {
+                                hr = shellItem->QueryInterface(riidItem, ppvItem);
+
+                                if (SUCCEEDED(hr))
+                                {
+                                    hr = idName->QueryInterface(riidResources, ppvResources); // this works cause I know idName is an instance of CDriveItemRelatedItem, which also impliments IShellItemResources
+                                }
+
+                                shellItem.Release();
+                            }
+                            idName.Release();
+                        }
+                    }
+                    else
+                    {
+                        Log::LogUnknownIID(riidItem, L"CDriveItemRelatedItem::CreateItem()");
+                        hr = E_INVALIDARG;
+                    }
                 }
-
-                shellItem.Release();
-              }
-              idName.Release();
             }
-          }
-          else
-          {
-            Log::LogUnknownIID(riidItem, L"CDriveItemRelatedItem::CreateItem()");
-            hr = E_INVALIDARG;
-          }
         }
-      }
+        pbc.Release();
     }
-    pbc.Release();
-  }
 
-  return hr;
+    return hr;
 }
 
 // ITransferSource
-STDMETHODIMP CDriveItemRelatedItem::SetProperties(__in  IPropertyChangeArray * /*pproparray*/)
+STDMETHODIMP CDriveItemRelatedItem::SetProperties(__in    IPropertyChangeArray * /*pproparray*/)
 {
-  Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::SetProperties E_NOTIMPL");
+    Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::SetProperties E_NOTIMPL");
 
-  return E_NOTIMPL;
+    return E_NOTIMPL;
 }
 
 // ITransferSource
-STDMETHODIMP CDriveItemRelatedItem::OpenItem(__in  IShellItem *psi, __in  TRANSFER_SOURCE_FLAGS /*flags*/, __in  REFIID riid, __deref_out  void **ppv)
+STDMETHODIMP CDriveItemRelatedItem::OpenItem(__in    IShellItem *psi, __in    TRANSFER_SOURCE_FLAGS /*flags*/, __in    REFIID riid, __deref_out    void **ppv)
 {
-  Log::WriteOutput(LogType::Warning, L"CDriveItemRelatedItem::OpenItem()");
+    Log::WriteOutput(LogType::Warning, L"CDriveItemRelatedItem::OpenItem()");
 
-  HRESULT hr = E_NOINTERFACE;
+    HRESULT hr = E_NOINTERFACE;
 
-  if (riid == IID_IShellItemResources)
-  {
-    hr = psi->BindToHandler(NULL, BHID_SFViewObject, riid, ppv);
-  }
-  else
-  {
-    Log::LogUnknownIID(riid, L"CDriveItemRelatedItem::OpenItem()");
-  }
+    if (riid == IID_IShellItemResources)
+    {
+        hr = psi->BindToHandler(NULL, BHID_SFViewObject, riid, ppv);
+    }
+    else
+    {
+        Log::LogUnknownIID(riid, L"CDriveItemRelatedItem::OpenItem()");
+    }
 
-  return hr;
+    return hr;
 
 }
 
 // ITransferSource
-STDMETHODIMP CDriveItemRelatedItem::MoveItem(__in  IShellItem * /*psi*/, __in  IShellItem * /*psiParentDst*/, __in  LPCWSTR /*pszNameDst*/, __in TRANSFER_SOURCE_FLAGS /*flags*/, __deref_out  IShellItem ** /*ppsiNew*/)
+STDMETHODIMP CDriveItemRelatedItem::MoveItem(__in    IShellItem * /*psi*/, __in    IShellItem * /*psiParentDst*/, __in    LPCWSTR /*pszNameDst*/, __in TRANSFER_SOURCE_FLAGS /*flags*/, __deref_out    IShellItem ** /*ppsiNew*/)
 {
-  Log::WriteOutput(LogType::Warning, L"CDriveItemRelatedItem::MoveItem E_NOTIMPL");
-  return E_NOTIMPL;
-  // Cut from Drive, Paste to FileSystem, calls this function, but it doesn't seem we need to implement it
+    Log::WriteOutput(LogType::Warning, L"CDriveItemRelatedItem::MoveItem E_NOTIMPL");
+    return E_NOTIMPL;
+    // Cut from Drive, Paste to FileSystem, calls this function, but it doesn't seem we need to implement it
 }
 
 // ITransferSource
-STDMETHODIMP CDriveItemRelatedItem::RecycleItem(__in  IShellItem *psiSource, __in  IShellItem * /*psiParentDest*/, __in  TRANSFER_SOURCE_FLAGS flags, __deref_out  IShellItem **ppsiNewDest)
+STDMETHODIMP CDriveItemRelatedItem::RecycleItem(__in    IShellItem *psiSource, __in    IShellItem * /*psiParentDest*/, __in    TRANSFER_SOURCE_FLAGS flags, __deref_out    IShellItem **ppsiNewDest)
 {
-  Log::WriteOutput(LogType::Warning, L"CDriveItemRelatedItem::RecycleItem Skipping recycle, going to trash in on google instead");
+    Log::WriteOutput(LogType::Warning, L"CDriveItemRelatedItem::RecycleItem Skipping recycle, going to trash in on google instead");
 
-  HRESULT hr = RemoveItem(psiSource, flags);
+    HRESULT hr = RemoveItem(psiSource, flags);
 
-  *ppsiNewDest = NULL;
+    *ppsiNewDest = NULL;
 
-  return hr;
+    return hr;
 }
 
 // ITransferSource
-STDMETHODIMP CDriveItemRelatedItem::RemoveItem(__in  IShellItem *psiSource, __in  TRANSFER_SOURCE_FLAGS /*flags*/)
+STDMETHODIMP CDriveItemRelatedItem::RemoveItem(__in    IShellItem *psiSource, __in    TRANSFER_SOURCE_FLAGS /*flags*/)
 {
-  Log::WriteOutput(LogType::Warning, L"CDriveItemRelatedItem::RemoveItem()");
-  HRESULT hr = S_OK;
+    Log::WriteOutput(LogType::Warning, L"CDriveItemRelatedItem::RemoveItem()");
+    HRESULT hr = S_OK;
 
-  CComPtr<IIdentityName> idName;
-  CHECK_HR(psiSource->BindToHandler(NULL, BHID_SFViewObject, IID_PPV_ARGS(&idName)));
-  
-  CIdList idPidl;
-  {
-    LPITEMIDLIST tmpPidl = nullptr;
-    CHECK_HR(idName->GetItemIDList(&tmpPidl));
-    idPidl.Reset(tmpPidl);
-  }
+    CComPtr<IIdentityName> idName;
+    CHECK_HR(psiSource->BindToHandler(NULL, BHID_SFViewObject, IID_PPV_ARGS(&idName)));
+    
+    CIdList idPidl;
+    {
+        LPITEMIDLIST tmpPidl = nullptr;
+        CHECK_HR(idName->GetItemIDList(&tmpPidl));
+        idPidl.Reset(tmpPidl);
+    }
 
-  CDriveItem item;
-  CHECK_HR(_gDriveShlExt->GetDriveItemFromIDList(idPidl, true, false, item));
-  
-  std::vector<std::wstring> ids;
-  ids.push_back(item.Id());
+    CDriveItem item;
+    CHECK_HR(_gDriveShlExt->GetDriveItemFromIDList(idPidl, true, false, item));
+    
+    std::vector<std::wstring> ids;
+    ids.push_back(item.Id());
 
-  std::vector<std::wstring> deletedIds;
-  CHECK_TRUE(_gDriveShlExt->FileManager()->DeleteFiles(ids, &deletedIds), E_FAIL);
-  // We only had one item, so if there is an item, then it must have been deleted ok.
-  CHECK_TRUE(deletedIds.size() == 1, E_FAIL);
-  
-  LONG eventId = item.IsFile()? SHCNE_DELETE : SHCNE_RMDIR;
-  SHChangeNotify(eventId, SHCNF_IDLIST | SHCNF_FLUSH, idPidl, NULL);
+    std::vector<std::wstring> deletedIds;
+    CHECK_TRUE(_gDriveShlExt->FileManager()->DeleteFiles(ids, &deletedIds), E_FAIL);
+    // We only had one item, so if there is an item, then it must have been deleted ok.
+    CHECK_TRUE(deletedIds.size() == 1, E_FAIL);
+    
+    LONG eventId = item.IsFile()? SHCNE_DELETE : SHCNE_RMDIR;
+    SHChangeNotify(eventId, SHCNF_IDLIST | SHCNF_FLUSH, idPidl, NULL);
 
-  CComPtr<IShellItem> parent;
-  CHECK_HR(psiSource->GetParent(&parent));
+    CComPtr<IShellItem> parent;
+    CHECK_HR(psiSource->GetParent(&parent));
 
-  CComPtr<IIdentityName> parentIdName;
-  CHECK_HR(parent->BindToHandler(NULL, BHID_SFViewObject, IID_PPV_ARGS(&parentIdName)));
+    CComPtr<IIdentityName> parentIdName;
+    CHECK_HR(parent->BindToHandler(NULL, BHID_SFViewObject, IID_PPV_ARGS(&parentIdName)));
 
-  CIdList parentPidl;
-  {
-    LPITEMIDLIST tmpPidl = nullptr;
-    CHECK_HR(parentIdName->GetItemIDList(&tmpPidl));
-    parentPidl.Reset(tmpPidl);
-  }
+    CIdList parentPidl;
+    {
+        LPITEMIDLIST tmpPidl = nullptr;
+        CHECK_HR(parentIdName->GetItemIDList(&tmpPidl));
+        parentPidl.Reset(tmpPidl);
+    }
 
-  SHChangeNotify(SHCNE_UPDATEDIR, SHCNF_IDLIST | SHCNF_FLUSH, parentPidl, NULL);
+    SHChangeNotify(SHCNE_UPDATEDIR, SHCNF_IDLIST | SHCNF_FLUSH, parentPidl, NULL);
 
-  return hr;
+    return hr;
 }
 
 // ITransferSource
-STDMETHODIMP CDriveItemRelatedItem::RenameItem(__in  IShellItem * /*psiSource*/, __in  LPCWSTR /*pszNewName*/, __in  TRANSFER_SOURCE_FLAGS /*flags*/, __deref_out  IShellItem ** /*ppsiNewDest*/)
+STDMETHODIMP CDriveItemRelatedItem::RenameItem(__in    IShellItem * /*psiSource*/, __in    LPCWSTR /*pszNewName*/, __in    TRANSFER_SOURCE_FLAGS /*flags*/, __deref_out    IShellItem ** /*ppsiNewDest*/)
 {
-  Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::RenameItem E_NOTIMPL");
+    Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::RenameItem E_NOTIMPL");
 
-  return E_NOTIMPL;
+    return E_NOTIMPL;
 }
 
 // ITransferSource
-STDMETHODIMP CDriveItemRelatedItem::LinkItem(__in  IShellItem * /*psiSource*/, __in  IShellItem * /*psiParentDest*/, __in_opt  LPCWSTR /*pszNewName*/, __in  TRANSFER_SOURCE_FLAGS /*flags*/, __deref_out  IShellItem ** /*ppsiNewDest*/)
+STDMETHODIMP CDriveItemRelatedItem::LinkItem(__in    IShellItem * /*psiSource*/, __in    IShellItem * /*psiParentDest*/, __in_opt    LPCWSTR /*pszNewName*/, __in    TRANSFER_SOURCE_FLAGS /*flags*/, __deref_out    IShellItem ** /*ppsiNewDest*/)
 {
-  Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::LinkItem E_NOTIMPL");
+    Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::LinkItem E_NOTIMPL");
 
-  return E_NOTIMPL;
+    return E_NOTIMPL;
 }
 
 // ITransferSource
-STDMETHODIMP CDriveItemRelatedItem::ApplyPropertiesToItem(__in  IShellItem * /*psiSource*/, __deref_out  IShellItem ** /*ppsiNew*/)
+STDMETHODIMP CDriveItemRelatedItem::ApplyPropertiesToItem(__in    IShellItem * /*psiSource*/, __deref_out    IShellItem ** /*ppsiNew*/)
 {
-  Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::ApplyPropertiesToItem E_NOTIMPL");
+    Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::ApplyPropertiesToItem E_NOTIMPL");
 
-  return E_NOTIMPL;
+    return E_NOTIMPL;
 }
 
 // ITransferSource
-STDMETHODIMP CDriveItemRelatedItem::GetDefaultDestinationName(__in  IShellItem *psiSource, __in  IShellItem * /*psiParentDest*/, __deref_out  LPWSTR *ppszDestinationName)
+STDMETHODIMP CDriveItemRelatedItem::GetDefaultDestinationName(__in    IShellItem *psiSource, __in    IShellItem * /*psiParentDest*/, __deref_out    LPWSTR *ppszDestinationName)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::GetDefaultDestinationName()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::GetDefaultDestinationName()");
 
-  HRESULT hr = psiSource->GetDisplayName(SIGDN_NORMALDISPLAY, ppszDestinationName);
+    HRESULT hr = psiSource->GetDisplayName(SIGDN_NORMALDISPLAY, ppszDestinationName);
 
-  return hr;
+    return hr;
 }
 
 // ITransferSource
-STDMETHODIMP CDriveItemRelatedItem::EnterFolder(__in  IShellItem * /*psiChildFolderDest*/)
+STDMETHODIMP CDriveItemRelatedItem::EnterFolder(__in    IShellItem * /*psiChildFolderDest*/)
 {
-  Log::WriteOutput(LogType::Warning, L"CDriveItemRelatedItem::EnterFolder()");
+    Log::WriteOutput(LogType::Warning, L"CDriveItemRelatedItem::EnterFolder()");
 
-  // This method is called when beginning to process a folder or subfolder in a recursive operation. For instance, when a source folder is copied to a destination folder, method ITransferSource::EnterFolder should be called with psiChildFolderDest set to the destination folder.
+    // This method is called when beginning to process a folder or subfolder in a recursive operation. For instance, when a source folder is copied to a destination folder, method ITransferSource::EnterFolder should be called with psiChildFolderDest set to the destination folder.
 
-  // Nothing for us to do right now
+    // Nothing for us to do right now
 
-  return S_OK;
+    return S_OK;
 }
 
 // ITransferSource
-STDMETHODIMP CDriveItemRelatedItem::LeaveFolder(__in  IShellItem * /*psiChildFolderDest*/)
+STDMETHODIMP CDriveItemRelatedItem::LeaveFolder(__in    IShellItem * /*psiChildFolderDest*/)
 {
-  Log::WriteOutput(LogType::Warning, L"CDriveItemRelatedItem::LeaveFolder()");
+    Log::WriteOutput(LogType::Warning, L"CDriveItemRelatedItem::LeaveFolder()");
 
-  // This method is called at the end of recursive file operations on a destination folder.
+    // This method is called at the end of recursive file operations on a destination folder.
 
-  // Nothing for us to do right now
+    // Nothing for us to do right now
 
-  return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CDriveItemRelatedItem::GetAttributes(__RPC__out DWORD *pdwAttributes)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::GetAttributes()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::GetAttributes()");
 
-  CDriveItem item;
+    CDriveItem item;
 
-  HRESULT hr = _gDriveShlExt->GetDriveItemFromID(_gDriveShlExt->Id(), false, false, item);
+    HRESULT hr = _gDriveShlExt->GetDriveItemFromID(_gDriveShlExt->Id(), false, false, item);
 
-  if (SUCCEEDED(hr))
-  {
-    *pdwAttributes = item.FileAttributes();
-  }
+    if (SUCCEEDED(hr))
+    {
+        *pdwAttributes = item.FileAttributes();
+    }
 
-  return hr;
+    return hr;
 }
 
 STDMETHODIMP CDriveItemRelatedItem::GetSize(__RPC__out ULONGLONG *pullSize)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::GetSize()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::GetSize()");
 
-  CDriveItem item;
+    CDriveItem item;
 
-  HRESULT hr = _gDriveShlExt->GetDriveItemFromID(_gDriveShlExt->Id(), false, false, item);
+    HRESULT hr = _gDriveShlExt->GetDriveItemFromID(_gDriveShlExt->Id(), false, false, item);
 
-  if (SUCCEEDED(hr))
-  {
-    *pullSize = item.FileInfo()->FileSize;
-  }
+    if (SUCCEEDED(hr))
+    {
+        *pullSize = item.FileInfo()->FileSize;
+    }
 
-  return hr;
+    return hr;
 }
 
 STDMETHODIMP CDriveItemRelatedItem::GetTimes(__RPC__out FILETIME *pftCreation, __RPC__out FILETIME *pftWrite, __RPC__out FILETIME *pftAccess)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::GetTimes()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::GetTimes()");
 
-  CDriveItem item;
-  WIN32_FIND_DATA times;
+    CDriveItem item;
+    WIN32_FIND_DATA times;
 
-  HRESULT hr = _gDriveShlExt->GetDriveItemFromID(_gDriveShlExt->Id(), false, false, item);
+    HRESULT hr = _gDriveShlExt->GetDriveItemFromID(_gDriveShlExt->Id(), false, false, item);
 
-  if (SUCCEEDED(hr))
-  {
-    if (item.TryWIN32FindData(times))
+    if (SUCCEEDED(hr))
     {
-      *pftCreation = times.ftCreationTime;
-      *pftWrite = times.ftLastWriteTime;
-      *pftAccess = times.ftLastAccessTime;
+        if (item.TryWIN32FindData(times))
+        {
+            *pftCreation = times.ftCreationTime;
+            *pftWrite = times.ftLastWriteTime;
+            *pftAccess = times.ftLastAccessTime;
+        }
+        else
+        {
+            hr = E_FAIL;
+        }
     }
-    else
-    {
-      hr = E_FAIL;
-    }
-  }
 
-  return hr;
+    return hr;
 }
 
 STDMETHODIMP CDriveItemRelatedItem::SetTimes(__RPC__in_opt const FILETIME * /*pftCreation*/, __RPC__in_opt const FILETIME * /*pftWrite*/, __RPC__in_opt const FILETIME * /*pftAccess*/)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::SetTimes()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::SetTimes()");
 
-  // We don't really care what this does, because Google and the filesystem is going to handle it
+    // We don't really care what this does, because Google and the filesystem is going to handle it
 
-  return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CDriveItemRelatedItem::GetResourceDescription(__RPC__in const SHELL_ITEM_RESOURCE * /*pcsir*/, __RPC__deref_out_opt_string LPWSTR * /*ppszDescription*/)
 {
-  Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::GetResourceDescription E_NOTIMPL");
+    Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::GetResourceDescription E_NOTIMPL");
 
-  return E_NOTIMPL;
+    return E_NOTIMPL;
 }
 
 STDMETHODIMP CDriveItemRelatedItem::EnumResources(__RPC__deref_out_opt IEnumResources **ppenumr)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::EnumResources()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::EnumResources()");
 
-  CSimpleArray<SHELL_ITEM_RESOURCE> aList;
+    CSimpleArray<SHELL_ITEM_RESOURCE> aList;
 
-  SHELL_ITEM_RESOURCE FileStream = { GUID_UndocumentedStreamResource, L"" };
+    SHELL_ITEM_RESOURCE FileStream = { GUID_UndocumentedStreamResource, L"" };
 
-  aList.Add(FileStream);
+    aList.Add(FileStream);
 
-  typedef CComEnum< IEnumResources, &IID_IEnumResources, SHELL_ITEM_RESOURCE, _Copy<SHELL_ITEM_RESOURCE> > CEnumResources;
+    typedef CComEnum< IEnumResources, &IID_IEnumResources, SHELL_ITEM_RESOURCE, _Copy<SHELL_ITEM_RESOURCE> > CEnumResources;
 
-  CComObject<CEnumResources>* pEnumResources;
+    CComObject<CEnumResources>* pEnumResources;
 
-  HRESULT hr = CComObject<CEnumResources>::CreateInstance(&pEnumResources);
-
-  if (SUCCEEDED(hr))
-  {
-    hr = pEnumResources->Init(aList.GetData(), aList.GetData() + aList.GetSize(), NULL, AtlFlagCopy);
+    HRESULT hr = CComObject<CEnumResources>::CreateInstance(&pEnumResources);
 
     if (SUCCEEDED(hr))
     {
-      hr = pEnumResources->QueryInterface(IID_PPV_ARGS(ppenumr));
-    }
-  }
+        hr = pEnumResources->Init(aList.GetData(), aList.GetData() + aList.GetSize(), NULL, AtlFlagCopy);
 
-  return hr;
+        if (SUCCEEDED(hr))
+        {
+            hr = pEnumResources->QueryInterface(IID_PPV_ARGS(ppenumr));
+        }
+    }
+
+    return hr;
 }
 
 STDMETHODIMP CDriveItemRelatedItem::SupportsResource(__RPC__in const SHELL_ITEM_RESOURCE *pcsir)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::SupportsResource()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::SupportsResource()");
 
-  if(pcsir->guidType == GUID_UndocumentedStreamResource)
-  {
-    return S_OK;
-  }
+    if(pcsir->guidType == GUID_UndocumentedStreamResource)
+    {
+        return S_OK;
+    }
 
-  return E_NOINTERFACE;
+    return E_NOINTERFACE;
 }
 
 STDMETHODIMP CDriveItemRelatedItem::OpenResource(__RPC__in const SHELL_ITEM_RESOURCE *pcsir, __RPC__in REFIID riid, __RPC__deref_out_opt void **ppv)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::OpenResource()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::OpenResource()");
 
-  HRESULT hr = E_NOINTERFACE;
+    HRESULT hr = E_NOINTERFACE;
 
-  if(pcsir->guidType == GUID_UndocumentedStreamResource )
-  {
-    CDriveItem item;
-
-    hr = _gDriveShlExt->GetDriveItemFromID(_gDriveShlExt->Id(), false, false, item);
-
-    if (SUCCEEDED(hr))
+    if(pcsir->guidType == GUID_UndocumentedStreamResource )
     {
-      if (riid == IID_IUnknown)
-      {
-        BIND_OPTS options;
-        ZeroMemory(&options, sizeof(BIND_OPTS));
-        options.cbStruct = sizeof(BIND_OPTS);
-        options.grfFlags = BIND_MAYBOTHERUSER;
-        // other properties are zero from ZeroMemory op above
+        CDriveItem item;
 
-        hr = CDriveItemStream::CreateInstanceReturnInterfaceTo(item, options, riid, ppv);
-      }
-      else
-      {
-        Log::LogUnknownIID(riid, L"CDriveItemRelatedItem::OpenResource()");
-        hr = E_INVALIDARG;
-      }
+        hr = _gDriveShlExt->GetDriveItemFromID(_gDriveShlExt->Id(), false, false, item);
+
+        if (SUCCEEDED(hr))
+        {
+            if (riid == IID_IUnknown)
+            {
+                BIND_OPTS options;
+                ZeroMemory(&options, sizeof(BIND_OPTS));
+                options.cbStruct = sizeof(BIND_OPTS);
+                options.grfFlags = BIND_MAYBOTHERUSER;
+                // other properties are zero from ZeroMemory op above
+
+                hr = CDriveItemStream::CreateInstanceReturnInterfaceTo(item, options, riid, ppv);
+            }
+            else
+            {
+                Log::LogUnknownIID(riid, L"CDriveItemRelatedItem::OpenResource()");
+                hr = E_INVALIDARG;
+            }
+        }
     }
-  }
-  else
-  {
-    Log::LogUnknownIID(riid, L"CDriveItemRelatedItem::OpenResource()");
-  }
+    else
+    {
+        Log::LogUnknownIID(riid, L"CDriveItemRelatedItem::OpenResource()");
+    }
 
-  return hr;
+    return hr;
 }
 
 STDMETHODIMP CDriveItemRelatedItem::CreateResource(__RPC__in const SHELL_ITEM_RESOURCE *pcsir, __RPC__in REFIID riid, __RPC__deref_out_opt void **ppv)
 {
-  Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::CreateResource()");
+    Log::WriteOutput(LogType::Debug, L"CDriveItemRelatedItem::CreateResource()");
 
-  HRESULT hr = E_NOINTERFACE;
+    HRESULT hr = E_NOINTERFACE;
 
-  if(pcsir->guidType == GUID_UndocumentedStreamResource )
-  {
-    CDriveItem item;
-
-    hr = _gDriveShlExt->GetDriveItemFromID(_gDriveShlExt->Id(), false, false, item);
-
-    if (SUCCEEDED(hr))
+    if(pcsir->guidType == GUID_UndocumentedStreamResource )
     {
-      if (riid == IID_IUnknown)
-      {
-        BIND_OPTS options;
-        ZeroMemory(&options, sizeof(BIND_OPTS));
-        options.cbStruct = sizeof(BIND_OPTS);
-        options.grfFlags = BIND_MAYBOTHERUSER;
-        options.grfMode = STGM_WRITE;
-        // other properties are zero from ZeroMemory op above
+        CDriveItem item;
 
-        hr = CDriveItemStream::CreateInstanceReturnInterfaceTo(item, options, riid, ppv);
-      }
-      else
-      {
-        Log::LogUnknownIID(riid, L"CDriveItemRelatedItem::CreateResource()");
-        hr = E_INVALIDARG;
-      }
+        hr = _gDriveShlExt->GetDriveItemFromID(_gDriveShlExt->Id(), false, false, item);
+
+        if (SUCCEEDED(hr))
+        {
+            if (riid == IID_IUnknown)
+            {
+                BIND_OPTS options;
+                ZeroMemory(&options, sizeof(BIND_OPTS));
+                options.cbStruct = sizeof(BIND_OPTS);
+                options.grfFlags = BIND_MAYBOTHERUSER;
+                options.grfMode = STGM_WRITE;
+                // other properties are zero from ZeroMemory op above
+
+                hr = CDriveItemStream::CreateInstanceReturnInterfaceTo(item, options, riid, ppv);
+            }
+            else
+            {
+                Log::LogUnknownIID(riid, L"CDriveItemRelatedItem::CreateResource()");
+                hr = E_INVALIDARG;
+            }
+        }
     }
-  }
-  else
-  {
-    Log::LogUnknownIID(riid, L"CDriveItemRelatedItem::CreateResource()");
-  }
+    else
+    {
+        Log::LogUnknownIID(riid, L"CDriveItemRelatedItem::CreateResource()");
+    }
 
-  return hr;
+    return hr;
 }
 
 STDMETHODIMP CDriveItemRelatedItem::MarkForDelete(void)
 {
-  Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::MarkForDelete E_NOTIMPL");
+    Log::WriteOutput(LogType::Error, L"CDriveItemRelatedItem::MarkForDelete E_NOTIMPL");
 
-  return E_NOTIMPL;
+    return E_NOTIMPL;
 }
