@@ -769,14 +769,14 @@ STDMETHODIMP CGDriveShlExt::CreateViewObject(HWND hwndOwner, REFIID riid, __dere
         }
         else
         {
-            Log::LogUnknownIID(riid, L"CGDriveShlExt::CreateViewObject()");
+            //Log::LogUnknownIID(riid, L"CGDriveShlExt::CreateViewObject()");
         }
 
         return hr;
     }
     catch (...)
     {
-        Log::WriteOutput(LogType::Error, L"CGDriveShlExt::CreateViewObject");
+        //Log::WriteOutput(LogType::Error, L"CGDriveShlExt::CreateViewObject");
 
         return E_FAIL;
     }

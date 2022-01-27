@@ -1,0 +1,34 @@
+https://www.codeproject.com/Articles/830/The-Complete-Idiots-Guide-to-Writing-Shell-Extensi
+
+Implementing the Basic Folder Object Interfaces
+https://docs.microsoft.com/en-us/windows/win32/shell/nse-implement
+
+Specifying a Namespace Extension's Location:
+https://docs.microsoft.com/en-us/windows/win32/shell/nse-junction
+
+It may be possible to add a drive with some SH interface. Google does it:
+https://github.com/google/google-drive-shell-extension
+
+After that, we implement a context menu option that will display a control/window to add/remove a device for displaying fs data.
+If the device is not present (cannot connect), we need a box to tell the user, which will then proceed to the add device selection screen.
+
+Note:
+ATL (Active Template Library) is just an easier implementation of COMs
+
+Note:
+Registering the dll (via regsvr32 <binary>.dll) uses DllInstall (winapi), which in the standard ATL setup, utilizes DllRegisterServer/UnRegisterServer, which can specify the key space in the registry to add/remove.
+E.g.:
+STDAPI DllInstall...
+{
+	...
+	DllRegisterServer
+	...
+	DllUnregisterServer
+}
+
+When creating a new ATL project, really, two projects are created by default. The first one is our primary concern, as it handles the standard magic needed to do things like register the typelibrary for our COM. The second project appends PS to the original ATL project name. The P and S stand for Proxy and Stub. Building this PS project produces a dll that helps with making calls on COM between different processes, different threads, or different machines; aka marshaling.
+
+
+
+
+
