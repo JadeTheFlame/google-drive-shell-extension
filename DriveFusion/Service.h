@@ -20,6 +20,7 @@ limitations under the License.
 #include <vector>
 #include <windows.h>
 #include <stdio.h>
+#include <memory>
 #include "MethodInfo.h"
 #include "ErrorInfo.h"
 #include "FileInfo.h"

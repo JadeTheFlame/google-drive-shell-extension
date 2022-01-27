@@ -17,6 +17,7 @@ limitations under the License.
 #include "MethodInfo.h"
 
 using namespace Fusion::GoogleDrive;
+typedef unsigned __int64 _ULonglong;
 
 MethodInfo::MethodInfo(void)
 {
@@ -41,7 +42,7 @@ void MethodInfo::Init(void)
 {
   Log::WriteOutput(LogType::Debug, L"MethodInfo::Init(void)");
 
-  Init(MethodType::Unknown);
+  Init(MethodType::eType::Unknown);
 }
 
 void MethodInfo::Init(MethodType::eType methodType)

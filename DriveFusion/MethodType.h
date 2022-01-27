@@ -21,7 +21,7 @@ namespace Fusion
   {
     struct MethodType
     {
-      enum eType
+      enum class eType
       {
         Unknown = 0,
         GetFiles = 1,
@@ -38,35 +38,35 @@ namespace Fusion
         GetAbout = 15
       };
 
-      static const std::wstring ToString(eType type)
+      static const std::wstring ToString(Fusion::GoogleDrive::MethodType::eType type)
       {
         switch (type)
         {
-        case Fusion::GoogleDrive::MethodType::GetFiles:
+        case Fusion::GoogleDrive::MethodType::eType::GetFiles:
           return L"GetFiles";
-        case Fusion::GoogleDrive::MethodType::DownloadFile:
+        case Fusion::GoogleDrive::MethodType::eType::DownloadFile:
           return L"DownloadFile";
-        case Fusion::GoogleDrive::MethodType::RenameFile:
+        case Fusion::GoogleDrive::MethodType::eType::RenameFile:
           return L"RenameFile";
-        case Fusion::GoogleDrive::MethodType::TrashFiles:
+        case Fusion::GoogleDrive::MethodType::eType::TrashFiles:
           return L"TrashFiles";
-        case Fusion::GoogleDrive::MethodType::UntrashFile:
+        case Fusion::GoogleDrive::MethodType::eType::UntrashFile:
           return L"UntrashFile";
-        case Fusion::GoogleDrive::MethodType::UploadFile:
+        case Fusion::GoogleDrive::MethodType::eType::UploadFile:
           return L"UploadFile";
-        case Fusion::GoogleDrive::MethodType::Authenticate:
+        case Fusion::GoogleDrive::MethodType::eType::Authenticate:
           return L"Authenticate";
-        case Fusion::GoogleDrive::MethodType::InsertFile:
+        case Fusion::GoogleDrive::MethodType::eType::InsertFile:
           return L"InsertFile";
-        case Fusion::GoogleDrive::MethodType::MoveFiles:
+        case Fusion::GoogleDrive::MethodType::eType::MoveFiles:
           return L"MoveFiles";
-        case Fusion::GoogleDrive::MethodType::CopyFiles:
+        case Fusion::GoogleDrive::MethodType::eType::CopyFiles:
           return L"CopyFiles";
-        case Fusion::GoogleDrive::MethodType::GetLog:
+        case Fusion::GoogleDrive::MethodType::eType::GetLog:
           return L"GetLog";
-        case Fusion::GoogleDrive::MethodType::GetAbout:
+        case Fusion::GoogleDrive::MethodType::eType::GetAbout:
           return L"GetAbout";
-        case Fusion::GoogleDrive::MethodType::Unknown:
+        case Fusion::GoogleDrive::MethodType::eType::Unknown:
         default:
           return L"Unknown";
         };

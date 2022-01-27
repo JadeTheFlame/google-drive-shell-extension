@@ -20,6 +20,7 @@ limitations under the License.
 #include <ctime>
 
 using namespace Fusion::GoogleDrive;
+typedef unsigned __int64 _ULonglong;
 
 Service::Service(bool debug): _debug (debug), _errorInfo(NULL)
 {
@@ -703,7 +704,7 @@ LogInfo* Service::GetLog()
 
 AboutInfo* Service::GetAbout()
 {
-  MethodInfo methodInfo(MethodType::GetAbout);
+  MethodInfo methodInfo(MethodType::eType::GetAbout);
 
   std::wstring xml;
 
@@ -722,7 +723,7 @@ bool Service::Authenticate()
 {
   Log::WriteOutput(LogType::Information, L"Service::Authenticate()");
 
-  MethodInfo methodInfo(MethodType::Authenticate);
+  MethodInfo methodInfo(MethodType::eType::Authenticate);
 
   std::wstring result;
 
@@ -735,7 +736,7 @@ FileInfo* Service::GetFiles(const std::wstring& id, bool updateCache, bool getCh
 {
   Log::WriteOutput(LogType::Information, L"Service::GetFiles(const std::wstring& id, bool updateCache, bool getChildren, bool ignoreError)");
 
-  MethodInfo methodInfo(MethodType::GetFiles);
+  MethodInfo methodInfo(MethodType::eType::GetFiles);
   methodInfo.AddParameter(id);
 
   methodInfo.AddParameter(L"1");
@@ -784,7 +785,7 @@ FileInfo* Service::DownloadFile(const std::wstring& id)
 {
   Log::WriteOutput(LogType::Information, L"Service::DownloadFile(HWND hwnd, const std::wstring& id)");
 
-  MethodInfo methodInfo(MethodType::DownloadFile);
+  MethodInfo methodInfo(MethodType::eType::DownloadFile);
   methodInfo.AddParameter(id);
 
   std::wstring xml;
@@ -804,7 +805,7 @@ FileInfo* Service::UploadFile(const std::wstring& id, const std::wstring& filePa
 {
   Log::WriteOutput(LogType::Information, L"Service::UploadFile(HWND hwnd, const std::wstring& id, const std::wstring& filePath)");
 
-  MethodInfo methodInfo(MethodType::UploadFile);
+  MethodInfo methodInfo(MethodType::eType::UploadFile);
   methodInfo.AddParameter(id);
   methodInfo.AddParameter(filePath);
 
@@ -825,7 +826,7 @@ FileInfo* Service::RenameFile(const std::wstring& id, const std::wstring& name)
 {
   Log::WriteOutput(LogType::Information, L"Service::RenameFile(HWND hwnd, const std::wstring& id, const std::wstring& name)");
 
-  MethodInfo methodInfo(MethodType::RenameFile);
+  MethodInfo methodInfo(MethodType::eType::RenameFile);
   methodInfo.AddParameter(id);
   methodInfo.AddParameter(name);
 
@@ -846,7 +847,7 @@ FileInfo* Service::InsertFile(const std::wstring& parentId, const std::wstring& 
 {
   Log::WriteOutput(LogType::Information, L"Service::InsertFile(HWND hwnd, const std::wstring& parentId, const std::wstring& filename)");
 
-  MethodInfo methodInfo(MethodType::InsertFile);
+  MethodInfo methodInfo(MethodType::eType::InsertFile);
   methodInfo.AddParameter(parentId);
   methodInfo.AddParameter(filename);
 
@@ -876,7 +877,7 @@ std::unique_ptr<std::vector<std::wstring>> Service::TrashFiles(const std::vector
 {
   Log::WriteOutput(LogType::Information, L"Service::TrashFiles(HWND hwnd, const std::vector<std::wstring>& ids)");
 
-  MethodInfo methodInfo(MethodType::TrashFiles);
+  MethodInfo methodInfo(MethodType::eType::TrashFiles);
   methodInfo.AddParameter(ids);
 
   std::wstring xml;
@@ -895,7 +896,7 @@ std::unique_ptr<std::vector<std::wstring>> Service::MoveFiles(const std::vector<
 {
   Log::WriteOutput(LogType::Information, L"Service::MoveFiles(HWND hwnd, const std::vector<std::wstring>& ids)");
 
-  MethodInfo methodInfo(MethodType::MoveFiles);
+  MethodInfo methodInfo(MethodType::eType::MoveFiles);
   methodInfo.AddParameter(dstId);
   methodInfo.AddParameter(ids);
 
@@ -915,7 +916,7 @@ std::unique_ptr<std::vector<std::wstring>> Service::CopyFiles(const std::vector<
 {
   Log::WriteOutput(LogType::Information, L"Service::CopyFiles(HWND hwnd, const std::vector<std::wstring>& ids)");
 
-  MethodInfo methodInfo(MethodType::CopyFiles);
+  MethodInfo methodInfo(MethodType::eType::CopyFiles);
   methodInfo.AddParameter(dstId);
   methodInfo.AddParameter(ids);
 

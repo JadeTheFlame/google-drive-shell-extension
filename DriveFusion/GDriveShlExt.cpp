@@ -2123,7 +2123,7 @@ STDMETHODIMP CGDriveShlExt::GetUIObjectOf(HWND hwndOwner, UINT cidl, __in_ecount
                 { ASSOCCLASS_APP_STR, NULL, app },
               };
 
-              HRESULT hr2 = AssocCreateForClasses(rgAssoc, ARRAYSIZE(rgAssoc), riid, ppv);
+              hr2 = AssocCreateForClasses(rgAssoc, ARRAYSIZE(rgAssoc), riid, ppv);
 
               if (!SUCCEEDED(hr2))
               {
@@ -2675,7 +2675,7 @@ void _LogName(PCWCHAR title, PCWCHAR returnedName, bool isError, SHGDNF uFlags)
 
   if (isError)
   {
-    Log::WriteOutput(LogType::Error, L"GetDisplayNameOf %s %s", title, _SHGDNFToString(uFlags));
+    Log::WriteOutput(LogType::Error, L"GetDisplayNameOf %s %s", title, _SHGDNFToString(uFlags).c_str());
   }
   else
   {

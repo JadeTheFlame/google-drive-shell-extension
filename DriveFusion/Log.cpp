@@ -182,7 +182,7 @@ void Log::LogUnknownIID(REFIID riid, LPTSTR lpszFunction)
 
   if (!SUCCEEDED(hr2))
   {
-    Log::WriteOutput(LogType::Error, L"%s not handled (riid=? class=?)", lpszFunction, temp1, temp2);
+    Log::WriteOutput(LogType::Error, L"%s not handled (riid=? class=?)", lpszFunction, (&temp1), (&temp2));
   }
   else
   {
@@ -190,11 +190,11 @@ void Log::LogUnknownIID(REFIID riid, LPTSTR lpszFunction)
 
     if (!SUCCEEDED(hr2))
     {
-      Log::WriteOutput(LogType::Error, L"%s not handled (riid=%s class=?)", lpszFunction, temp1);
+      Log::WriteOutput(LogType::Error, L"%s not handled (riid=%s class=?)", lpszFunction,(&temp1));
     }
     else
     {
-      Log::WriteOutput(LogType::Error, L"%s not handled (riid=%s class=%s)", lpszFunction, temp1, temp2);
+      Log::WriteOutput(LogType::Error, L"%s not handled (riid=%s class=%s)", lpszFunction, (&temp1), (&temp2));
     }
   }
 }

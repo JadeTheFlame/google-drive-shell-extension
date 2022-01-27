@@ -88,7 +88,7 @@ STDMETHODIMP CDriveItemRelatedItem::GetItem(__RPC__deref_out_opt IShellItem **pp
 
     if (SUCCEEDED(hr))
     {
-      HRESULT hr = SHCreateItemFromIDList(pidl, IID_PPV_ARGS(ppsi));
+      hr = SHCreateItemFromIDList(pidl, IID_PPV_ARGS(ppsi));
 
       if (!SUCCEEDED(hr))
       {
@@ -130,7 +130,7 @@ STDMETHODIMP CDriveItemRelatedItem::Advise(__in  ITransferAdviseSink *psink, __o
 
   *pdwCookie = _nextCookie;
 
-  if (_nextCookie == (DWORD)std::numeric_limits<DWORD>::max)
+  if (_nextCookie == (DWORD_PTR)std::numeric_limits<DWORD>::max)
   {
     _nextCookie = 0;
   }

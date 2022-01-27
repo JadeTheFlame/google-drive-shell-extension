@@ -132,7 +132,7 @@ bool XmlReader::MoveToNextElement()
     endIndex1 = _Xml.find(find1, _StartIndex);
 
     find2 = L" />";
-    size_t endIndex2 = _Xml.find(find2, _StartIndex);
+    endIndex2 = _Xml.find(find2, _StartIndex);
 
     find = L"";
     endIndex = std::wstring::npos;
@@ -156,7 +156,7 @@ bool XmlReader::MoveToNextElement()
 
     _EndIndex = endIndex + find.length();
 
-    size_t startIndex = _StartIndex + 1;
+    startIndex = _StartIndex + 1;
     size_t tempIndex = _Xml.find(L" ", startIndex);
 
     if (tempIndex != std::wstring::npos && tempIndex < _EndIndex)

@@ -169,7 +169,7 @@ private:
     UINT uiHelpId;
   } _MenuInfo[];
 
-  static const struct HOSTINFO
+  const struct HOSTINFO
   {
     enum TYPE
     {

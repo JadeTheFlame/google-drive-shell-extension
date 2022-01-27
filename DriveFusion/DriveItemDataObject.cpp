@@ -370,7 +370,7 @@ STDMETHODIMP CDriveItemDataObject::DragEnter(__RPC__in_opt IDataObject * pDataOb
 
     CComHeapPtr<IEnumFORMATETC> eFormat;
 
-    HRESULT hr = pDataObj->EnumFormatEtc(DATADIR_GET, &eFormat);
+    hr = pDataObj->EnumFormatEtc(DATADIR_GET, &eFormat);
 
     ULONG received = 0;
     FORMATETC rformatArray[100];

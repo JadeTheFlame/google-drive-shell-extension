@@ -496,9 +496,9 @@ bool FileManager::DeleteFiles(const std::vector<std::wstring>& ids, std::vector<
 
   FileIdMap::iterator it;
 
-  for (std::vector<std::wstring>::iterator it = tempIds->begin(); it != tempIds->end(); it++)
+  for (std::vector<std::wstring>::iterator vit = tempIds->begin(); vit != tempIds->end(); vit++)
   {
-    _MoveFromCacheToIgnored((*it));
+    _MoveFromCacheToIgnored((*vit));
   }
 
   *deletedIds = std::move(*tempIds);
